@@ -60,7 +60,8 @@
         [/cotiz|presupuesto/, '/cotizar/'],
         [/contacto|whatsapp|telefono/, '/contacto/'],
         [/nosotros|quienes|empresa|equipo/, '/nosotros/'],
-        [/privacidad|datos.?personales|legal/, '/privacidad/']
+        [/privacidad|datos.?personales|legal/, '/privacidad/'],
+        [/zona.?oeste|ituzaingo|castelar|moron|hurlingham|padua|merlo|haedo/, '/seguros-zona-oeste/']
       ];
       var destino = '/';
       for (var i = 0; i < reglas.length; i++) { if (reglas[i][0].test(p)) { destino = reglas[i][1]; break; } }
