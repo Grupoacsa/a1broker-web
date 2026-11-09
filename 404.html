@@ -22,12 +22,57 @@
     .primary { background: linear-gradient(90deg, #FF1493, #8A2BE2); }
     .secondary { border: 1px solid rgba(255,255,255,.35); }
   </style>
+  <script>
+    // Dirección inexistente: llevar a la página más parecida según las palabras de la dirección; si no hay, al inicio.
+    (function () {
+      var p = decodeURIComponent(location.pathname + ' ' + location.search).toLowerCase()
+        .normalize('NFD').replace(/[̀-ͯ]/g, '');
+      var reglas = [
+        [/swiss/, '/medicina-prepaga/swiss-medical/'],
+        [/galeno/, '/medicina-prepaga/galeno/'],
+        [/omint/, '/medicina-prepaga/omint/'],
+        [/sancor/, '/medicina-prepaga/sancor-salud/'],
+        [/prevencion/, '/medicina-prepaga/prevencion-salud/'],
+        [/prepaga|medicina|salud|obra.?social/, '/medicina-prepaga/'],
+        [/retiro|jubila/, '/seguros-vida/de-retiro/'],
+        [/ahorro|inversion/, '/seguros-vida/con-ahorro/'],
+        [/vida/, '/seguros-vida/con-ahorro/'],
+        [/sepelio/, '/seguros/sepelio/'],
+        [/accidente/, '/seguros/accidentes-personales/'],
+        [/flota/, '/seguros/flotas/'],
+        [/auto|coche|vehiculo|automotor/, '/seguros/autos/'],
+        [/moto/, '/seguros/motos/'],
+        [/bici/, '/seguros/bicicletas/'],
+        [/monopatin/, '/seguros/monopatines/'],
+        [/\bart\b|riesgo.?del.?trabajo|riesgos.?trabajo/, '/seguros/art/'],
+        [/comercio|negocio|local/, '/seguros/integral-comercio/'],
+        [/incendio/, '/seguros/incendio/'],
+        [/hogar|casa|combinado|vivienda/, '/seguros/combinado-familiar/'],
+        [/responsabilidad|civil/, '/seguros/responsabilidad-civil/'],
+        [/caucion|alquiler|garantia/, '/seguros/cauciones/'],
+        [/\btro\b|todo.?riesgo/, '/seguros/tro/'],
+        [/viaje|viajero|asistencia/, '/seguros/asistencia-viajero/'],
+        [/bolso/, '/seguros/bolso-protegido/'],
+        [/tecnolog|celular|notebook|electro/, '/seguros/tecnologia/'],
+        [/transporte|mercaderia|carga/, '/seguros/transporte/'],
+        [/embarcacion|barco|lancha|nautic/, '/seguros/embarcaciones/'],
+        [/agenda|turno|reunion|entrevista|cita/, '/agenda/'],
+        [/cotiz|presupuesto/, '/cotizar/'],
+        [/contacto|whatsapp|telefono/, '/contacto/'],
+        [/nosotros|quienes|empresa|equipo/, '/nosotros/'],
+        [/privacidad|datos.?personales|legal/, '/privacidad/']
+      ];
+      var destino = '/';
+      for (var i = 0; i < reglas.length; i++) { if (reglas[i][0].test(p)) { destino = reglas[i][1]; break; } }
+      location.replace(destino);
+    })();
+  </script>
 </head>
 <body>
   <main>
     <a href="/"><img src="/assets/logo-TyLVwt_b.png" alt="A1 Broker" /></a>
     <h1>404</h1>
-    <h2>No encontramos esta página</h2>
+    <h2>Te llevamos a la página correcta…</h2>
     <p>Puede que el enlace esté mal escrito o que la página ya no exista. Volvé al inicio o escribinos y te ayudamos.</p>
     <div class="btns">
       <a class="btn primary" href="/">Ir al inicio</a>
