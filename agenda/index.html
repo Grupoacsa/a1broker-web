@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/logo.png" type="image/png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>Agendá una entrevista | A1 Broker Seguros</title>
+  <meta name="description" content="Elegí día y horario y un ejecutivo especialista de A1 Broker te llama. Entrevistas de 30 minutos, sin costo." />
+  <meta property="og:title" content="Agendá una entrevista | A1 Broker Seguros" />
+  <meta property="og:description" content="Elegí día y horario y un ejecutivo especialista de A1 Broker te llama. Entrevistas de 30 minutos, sin costo." />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_AR" />
+  <meta property="og:url" content="https://a1broker.com.ar/agenda" />
+  <meta property="og:image" content="https://a1broker.com.ar/og-image.jpg" />
+  <link rel="canonical" href="https://a1broker.com.ar/agenda" />
+  <style>
+    :root {
+      --noche: #0f1a2a;
+      --azul: #1d4ed8;
+      --azul2: #3b82f6;
+      --cielo: #06b6d4;
+      --naranja: #f97316;
+      --ambar: #f59e0b;
+      --verde: #10b981;
+      --rosa: #ec4899;
+      --violeta: #8b5cf6;
+      --tinta: #0f172a;
+      --gris: #64748b;
+      --linea: #e2e8f0;
+      --fondo-card: #ffffff;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body {
+      font-family: Montserrat, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--tinta);
+      background: var(--noche);
+      min-height: 100vh;
+    }
+    a { color: inherit; }
+
+    header.top {
+      display: flex; align-items: center; justify-content: space-between;
+      max-width: 1000px; margin: 0 auto; padding: 14px 16px;
+    }
+    header.top img { height: 64px; width: auto; display: block; }
+    header.top a.volver {
+      color: #fff; text-decoration: none; font-weight: 600; font-size: 14px;
+      border: 1px solid rgba(255,255,255,.35); padding: 8px 14px; border-radius: 999px;
+    }
+    header.top a.volver:hover { background: rgba(255,255,255,.1); }
+
+    .hero {
+      position: relative; overflow: hidden;
+      max-width: 1000px; margin: 0 auto; padding: 18px 16px 90px; color: #fff; text-align: center;
+    }
+    .hero::before, .hero::after {
+      content: ""; position: absolute; border-radius: 50%; filter: blur(60px); opacity: .55; z-index: 0;
+    }
+    .hero::before { width: 320px; height: 320px; background: var(--azul2); top: -80px; left: -60px; }
+    .hero::after { width: 280px; height: 280px; background: var(--rosa); top: 0; right: -60px; opacity: .4; }
+    .hero > * { position: relative; z-index: 1; }
+    .pill {
+      display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+      background: linear-gradient(90deg, var(--naranja), var(--ambar)); color: #fff;
+      padding: 6px 14px; border-radius: 999px;
+    }
+    .hero h1 { font-size: clamp(28px, 6vw, 46px); margin: 14px 0 10px; font-weight: 800; line-height: 1.1; }
+    .hero h1 span {
+      background: linear-gradient(90deg, #60a5fa, var(--cielo), #f0abfc);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .hero p { margin: 0 auto; max-width: 560px; font-size: 16px; color: rgba(255,255,255,.85); line-height: 1.5; }
+    .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 18px; }
+    .chips span {
+      font-size: 13px; font-weight: 600; padding: 7px 12px; border-radius: 999px;
+      background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+    }
+
+    main { max-width: 760px; margin: -64px auto 0; padding: 0 16px 56px; position: relative; z-index: 2; }
+    .card {
+      background: var(--fondo-card); border-radius: 22px; overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0,0,0,.35);
+    }
+    .franja { height: 8px; background: linear-gradient(90deg, var(--azul), var(--cielo), var(--verde), var(--ambar), var(--naranja), var(--rosa), var(--violeta)); }
+    .body { padding: 22px; }
+    .paso { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; font-size: 17px; font-weight: 700; }
+    .paso b {
+      display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
+      color: #fff; font-size: 14px; flex: 0 0 auto;
+    }
+    .p1 b { background: var(--azul); }
+    .p2 b { background: var(--naranja); }
+    .p3 b { background: var(--verde); }
+
+    .days { display: flex; gap: 10px; overflow-x: auto; padding: 2px 2px 10px; scroll-snap-type: x mandatory; }
+    .day {
+      flex: 0 0 auto; min-width: 74px; scroll-snap-align: start;
+      border: 2px solid var(--linea); background: #f8fafc; color: var(--tinta);
+      border-radius: 16px; padding: 10px 8px; font: inherit; cursor: pointer; text-align: center;
+      transition: transform .12s, border-color .12s, background .12s;
+    }
+    .day:hover { transform: translateY(-2px); border-color: var(--azul2); }
+    .day span { display: block; font-size: 12px; font-weight: 600; color: var(--gris); text-transform: capitalize; }
+    .day strong { display: block; font-size: 24px; font-weight: 800; margin: 2px 0; }
+    .day[aria-pressed="true"] {
+      background: linear-gradient(135deg, var(--azul), var(--cielo)); border-color: transparent; color: #fff;
+      box-shadow: 0 8px 20px rgba(29,78,216,.35);
+    }
+    .day[aria-pressed="true"] span { color: rgba(255,255,255,.85); }
+
+    .turno-titulo { margin: 18px 0 8px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+    .manana { color: #b45309; }
+    .tarde { color: #0e7490; }
+    .slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 8px; }
+    .slot {
+      border: 2px solid; border-radius: 12px; padding: 11px 0; background: #fff;
+      font: 700 15px Montserrat, sans-serif; cursor: pointer; transition: transform .1s, background .1s;
+    }
+    .slot.m { border-color: #fcd34d; color: #b45309; background: #fffbeb; }
+    .slot.t { border-color: #67e8f9; color: #0e7490; background: #ecfeff; }
+    .slot:hover:not(:disabled) { transform: scale(1.04); }
+    .slot.m[aria-pressed="true"] { background: linear-gradient(135deg, var(--ambar), var(--naranja)); border-color: transparent; color: #fff; }
+    .slot.t[aria-pressed="true"] { background: linear-gradient(135deg, var(--cielo), var(--verde)); border-color: transparent; color: #fff; }
+    .slot:disabled { border-color: var(--linea); color: #cbd5e1; background: #f8fafc; text-decoration: line-through; cursor: default; }
+    .vacio { color: var(--gris); font-size: 14px; padding: 8px 0; }
+    .cargando { color: var(--gris); font-size: 14px; }
+
+    form { display: none; margin-top: 24px; border-top: 2px dashed var(--linea); padding-top: 20px; }
+    form.on { display: block; }
+    .elegido {
+      display: inline-block; margin: 0 0 6px; padding: 8px 14px; border-radius: 12px;
+      background: linear-gradient(90deg, #eff6ff, #fdf4ff); color: var(--azul); font-weight: 700; font-size: 15px;
+    }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+    @media (max-width: 560px) { .grid2 { grid-template-columns: 1fr; } }
+    label { display: block; font-size: 13px; font-weight: 600; margin: 12px 0 5px; }
+    input, select, textarea {
+      width: 100%; padding: 12px; border: 2px solid var(--linea); border-radius: 12px;
+      font: inherit; font-size: 15px; color: var(--tinta); background: #fff;
+    }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--azul2); }
+    textarea { min-height: 72px; resize: vertical; }
+    .btn {
+      margin-top: 18px; width: 100%; border: 0; border-radius: 14px; padding: 15px;
+      background: linear-gradient(90deg, var(--naranja), var(--rosa)); color: #fff;
+      font: 800 16px Montserrat, sans-serif; cursor: pointer; box-shadow: 0 10px 24px rgba(249,115,22,.35);
+    }
+    .btn:disabled { opacity: .6; cursor: wait; }
+    .aviso-legal { font-size: 12px; color: var(--gris); margin: 10px 0 0; text-align: center; }
+    .error { color: #dc2626; font-size: 14px; font-weight: 600; margin-top: 10px; display: none; }
+
+    .done { display: none; padding: 34px 22px 30px; text-align: center; }
+    .done.on { display: block; }
+    .tick {
+      width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 14px; display: grid; place-items: center;
+      background: linear-gradient(135deg, var(--verde), var(--cielo)); color: #fff; font-size: 36px;
+      box-shadow: 0 10px 26px rgba(16,185,129,.4);
+    }
+    .done h2 { margin: 0 0 8px; font-size: 24px; }
+    .done p { margin: 0 auto; max-width: 440px; color: var(--gris); line-height: 1.5; }
+    .done .cuando { color: var(--tinta); font-weight: 700; }
+    .done a.btn { display: inline-block; width: auto; padding: 13px 22px; text-decoration: none; margin-top: 20px; }
+
+    footer { text-align: center; color: rgba(255,255,255,.6); font-size: 13px; padding: 0 16px 30px; line-height: 1.6; }
+    footer a { color: #fff; }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <a href="/"><img src="/assets/logo-TyLVwt_b.png" alt="A1 Broker" /></a>
+    <a class="volver" href="/">Volver al inicio</a>
+  </header>
+
+  <section class="hero">
+    <span class="pill">Sin costo</span>
+    <h1>Agendá tu <span>entrevista</span></h1>
+    <p>Elegí el día y el horario que te quede cómodo. Un ejecutivo especialista te llama para asesorarte.</p>
+    <div class="chips">
+      <span>⏱ 30 minutos</span>
+      <span>📞 Te llamamos</span>
+      <span>🛡 Vida y Medicina Prepaga</span>
+    </div>
+  </section>
+
+  <main>
+    <div class="card">
+      <div class="franja"></div>
+      <div id="pick" class="body">
+        <h2 class="paso p1"><b>1</b> Elegí el día</h2>
+        <div class="days" id="days"></div>
+
+        <h2 class="paso p2" style="margin-top:18px"><b>2</b> Elegí el horario</h2>
+        <div id="slots"></div>
+
+        <form id="form" novalidate>
+          <h2 class="paso p3"><b>3</b> Dejanos tus datos</h2>
+          <div class="elegido" id="elegido"></div>
+          <div class="grid2">
+            <div><label for="nombre">Nombre y apellido</label><input id="nombre" name="nombre" autocomplete="name" required></div>
+            <div><label for="telefono">Teléfono</label><input id="telefono" name="telefono" type="tel" autocomplete="tel" placeholder="11 5555-5555" required></div>
+            <div><label for="email">Mail</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+            <div><label for="tema">¿Qué te interesa?</label>
+              <select id="tema" name="tema">
+                <option>Seguro de vida</option>
+                <option>Seguro de vida con ahorro</option>
+                <option>Medicina prepaga</option>
+                <option>Otros seguros</option>
+              </select>
+            </div>
+          </div>
+          <label for="comentario">Comentario (opcional)</label>
+          <textarea id="comentario" name="comentario" placeholder="Contanos brevemente tu consulta"></textarea>
+          <button class="btn" type="submit" id="enviar">Confirmar entrevista</button>
+          <div class="error" id="error"></div>
+          <p class="aviso-legal">Usamos tus datos solo para contactarte por esta consulta. <a href="/privacidad">Política de privacidad</a>.</p>
+        </form>
+      </div>
+
+      <div id="done" class="done">
+        <div class="tick">✓</div>
+        <h2>¡Listo, quedó agendada!</h2>
+        <p><span class="cuando" id="cuando"></span><br>Un ejecutivo especialista te va a llamar en ese horario al teléfono que nos dejaste.</p>
+        <a class="btn" href="/">Volver al inicio</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    ¿Preferís escribirnos? <a href="https://wa.me/5491133258129" target="_blank" rel="noopener">WhatsApp 11 3325-8129</a> · <a href="mailto:comercial@a1broker.com.ar">comercial@a1broker.com.ar</a>
+  </footer>
+
+  <script>
+    // ---- Configuración ----
+    // URL del Google Apps Script que guarda el turno en el calendario y manda el mail de aviso.
+    // Mientras esté vacía, la reserva se envía por WhatsApp al número de A1.
+    const SCRIPT_URL = '';
+    const WHATSAPP = '5491133258129';
+    const DIAS_A_MOSTRAR = 10;          // días hábiles hacia adelante
+    const HORARIOS = [                   // franjas de atención (hora Argentina)
+      { desde: '09:00', hasta: '13:00' },
+      { desde: '14:00', hasta: '18:00' },
+    ];
+    const DURACION = 30;                 // minutos
+    const ANTICIPACION_MIN = 120;        // no ofrecer turnos que empiecen en menos de 2 h
+    const FERIADOS = [                   // AAAA-MM-DD, días sin atención
+      '2026-12-08', '2026-12-25', '2027-01-01',
+    ];
+    // -----------------------
+
+    const $ = (id) => document.getElementById(id);
+    const pad = (n) => String(n).padStart(2, '0');
+    const aMin = (hhmm) => { const [h, m] = hhmm.split(':').map(Number); return h * 60 + m; };
+    const aHora = (min) => `${pad(Math.floor(min / 60))}:${pad(min % 60)}`;
+
+    // Fecha "de hoy" en Argentina (UTC-3, sin horario de verano)
+    function ahoraAR() { return new Date(Date.now() - 3 * 3600e3); }
+    function claveDia(d) { return `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}`; }
+    function inicioISO(clave, hhmm) { return `${clave}T${hhmm}:00-03:00`; }
+    const fmtDia = (d, o) => d.toLocaleDateString('es-AR', { timeZone: 'UTC', ...o });
+
+    let ocupados = new Set();
+    let diaSel = null, horaSel = null;
+
+    function proximosDias() {
+      const dias = [];
+      const d = ahoraAR(); d.setUTCHours(12, 0, 0, 0);
+      while (dias.length < DIAS_A_MOSTRAR) {
+        const dow = d.getUTCDay();
+        if (dow !== 0 && dow !== 6 && !FERIADOS.includes(claveDia(d)) && horariosDelDia(new Date(d)).some(s => s.libre)) {
+          dias.push(new Date(d));
+        }
+        d.setUTCDate(d.getUTCDate() + 1);
+        if (d - ahoraAR() > 60 * 864e5) break;
+      }
+      return dias;
+    }
+
+    function horariosDelDia(d) {
+      const clave = claveDia(d);
+      const limite = Date.now() + ANTICIPACION_MIN * 60e3;
+      const lista = [];
+      HORARIOS.forEach(f => {
+        for (let t = aMin(f.desde); t + DURACION <= aMin(f.hasta); t += DURACION) {
+          const hhmm = aHora(t);
+          const iso = inicioISO(clave, hhmm);
+          lista.push({ hhmm, iso, tarde: t >= 13 * 60, libre: new Date(iso).getTime() > limite && !ocupados.has(iso) });
+        }
+      });
+      return lista;
+    }
+
+    function pintarDias() {
+      const cont = $('days'); cont.innerHTML = '';
+      const dias = proximosDias();
+      dias.forEach((d, i) => {
+        const b = document.createElement('button');
+        b.type = 'button'; b.className = 'day';
+        b.innerHTML = `<span>${fmtDia(d, { weekday: 'short' })}</span><strong>${d.getUTCDate()}</strong><span>${fmtDia(d, { month: 'short' })}</span>`;
+        b.onclick = () => elegirDia(d, b);
+        cont.appendChild(b);
+        if (i === 0) elegirDia(d, b);
+      });
+      if (!dias.length) $('slots').innerHTML = '<p class="vacio">No hay turnos disponibles por ahora. Escribinos por WhatsApp.</p>';
+    }
+
+    function elegirDia(d, boton) {
+      diaSel = d; horaSel = null;
+      $('form').classList.remove('on');
+      document.querySelectorAll('.day').forEach(e => e.setAttribute('aria-pressed', e === boton));
+      const lista = horariosDelDia(d);
+      const cont = $('slots'); cont.innerHTML = '';
+      [['Mañana', 'manana', lista.filter(s => !s.tarde)], ['Tarde', 'tarde', lista.filter(s => s.tarde)]].forEach(([titulo, cls, grupo]) => {
+        if (!grupo.length) return;
+        const h = document.createElement('div'); h.className = `turno-titulo ${cls}`; h.textContent = titulo; cont.appendChild(h);
+        const g = document.createElement('div'); g.className = 'slots';
+        grupo.forEach(s => {
+          const b = document.createElement('button');
+          b.type = 'button'; b.className = `slot ${s.tarde ? 't' : 'm'}`; b.textContent = s.hhmm; b.disabled = !s.libre;
+          b.onclick = () => elegirHora(s, b);
+          g.appendChild(b);
+        });
+        cont.appendChild(g);
+      });
+    }
+
+    function textoCuando() {
+      return `${fmtDia(diaSel, { weekday: 'long', day: 'numeric', month: 'long' })} a las ${horaSel.hhmm} h`;
+    }
+
+    function elegirHora(s, boton) {
+      horaSel = s;
+      document.querySelectorAll('.slot').forEach(e => e.setAttribute('aria-pressed', e === boton));
+      $('elegido').textContent = '📅 ' + textoCuando().replace(/^./, c => c.toUpperCase());
+      $('form').classList.add('on');
+      $('error').style.display = 'none';
+      $('form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function mostrarError(msg) { const e = $('error'); e.textContent = msg; e.style.display = 'block'; }
+
+    $('form').addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      const datos = {
+        inicio: horaSel && horaSel.iso,
+        nombre: $('nombre').value.trim(),
+        telefono: $('telefono').value.trim(),
+        email: $('email').value.trim(),
+        tema: $('tema').value,
+        comentario: $('comentario').value.trim(),
+      };
+      if (!datos.inicio) return mostrarError('Elegí un horario.');
+      if (!datos.nombre || !datos.telefono) return mostrarError('Completá nombre y teléfono.');
+      if (!/^\S+@\S+\.\S+$/.test(datos.email)) return mostrarError('Revisá el mail.');
+
+      if (!SCRIPT_URL) {
+        const msg = `Hola, quiero agendar una entrevista.\n📅 ${textoCuando()}\n👤 ${datos.nombre}\n📞 ${datos.telefono}\n✉️ ${datos.email}\n🛡 ${datos.tema}` + (datos.comentario ? `\n💬 ${datos.comentario}` : '');
+        window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+        return terminar();
+      }
+
+      const boton = $('enviar'); boton.disabled = true; boton.textContent = 'Agendando…';
+      try {
+        const r = await fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(datos) });
+        const res = await r.json();
+        if (res.ok) return terminar();
+        if (res.error === 'ocupado') {
+          ocupados.add(datos.inicio);
+          elegirDia(diaSel, document.querySelector('.day[aria-pressed="true"]'));
+          return mostrarError('Ese horario se acaba de ocupar. Elegí otro, por favor.');
+        }
+        mostrarError('No pudimos agendar. Probá de nuevo o escribinos por WhatsApp.');
+      } catch (e) {
+        mostrarError('No pudimos agendar. Probá de nuevo o escribinos por WhatsApp.');
+      } finally {
+        boton.disabled = false; boton.textContent = 'Confirmar entrevista';
+      }
+    });
+
+    function terminar() {
+      $('cuando').textContent = textoCuando().replace(/^./, c => c.toUpperCase());
+      $('pick').style.display = 'none';
+      $('done').classList.add('on');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    async function iniciar() {
+      if (SCRIPT_URL) {
+        $('slots').innerHTML = '<p class="cargando">Buscando horarios libres…</p>';
+        try {
+          const r = await fetch(`${SCRIPT_URL}?accion=ocupados&dias=${DIAS_A_MOSTRAR + 10}`);
+          const res = await r.json();
+          ocupados = new Set(res.ocupados || []);
+        } catch (e) { /* si falla, se muestran todos y el script valida al reservar */ }
+      }
+      pintarDias();
+    }
+    iniciar();
+  </script>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "de5e65ddb3864caa833af32e63ea078b"}'></script></body>
+</html>
