@@ -165,6 +165,15 @@
     .done .cuando { color: var(--tinta); font-weight: 700; }
     .done a.btn { display: inline-block; width: auto; padding: 13px 22px; text-decoration: none; margin-top: 20px; }
 
+    .extras { display: grid; gap: 10px; max-width: 360px; margin: 22px auto 0; }
+    .extra {
+      display: block; padding: 13px 16px; border-radius: 14px; color: #fff; text-decoration: none;
+      font-weight: 700; font-size: 15px;
+    }
+    .extra.wa { background: linear-gradient(90deg, #22c55e, #10b981); box-shadow: 0 8px 20px rgba(16,185,129,.3); }
+    .extra.cal { background: linear-gradient(90deg, var(--azul), var(--violeta)); box-shadow: 0 8px 20px rgba(29,78,216,.3); }
+    .volver-inicio { display: inline-block; margin-top: 16px; color: var(--gris); font-weight: 600; font-size: 14px; }
+
     footer { text-align: center; color: rgba(255,255,255,.6); font-size: 13px; padding: 0 16px 30px; line-height: 1.6; }
     footer a { color: #fff; }
   </style>
@@ -176,7 +185,6 @@
   </header>
 
   <section class="hero">
-    <span class="pill">Sin costo</span>
     <h1>Agendá tu <span>entrevista</span></h1>
     <p>Elegí el día y el horario que te quede cómodo. Un ejecutivo especialista te llama para asesorarte.</p>
     <div class="chips">
@@ -224,7 +232,11 @@
         <div class="tick">✓</div>
         <h2>¡Listo, quedó agendada!</h2>
         <p><span class="cuando" id="cuando"></span><br>Un ejecutivo especialista te va a llamar en ese horario al teléfono que nos dejaste.</p>
-        <a class="btn" href="/">Volver al inicio</a>
+        <div class="extras">
+          <a class="extra wa" id="btn-wa" href="#" target="_blank" rel="noopener">Avisar también por WhatsApp</a>
+          <a class="extra cal" id="btn-cal" href="#" target="_blank" rel="noopener">Agregar a mi calendario</a>
+        </div>
+        <a class="volver-inicio" href="/">Volver al inicio</a>
       </div>
     </div>
   </main>
@@ -235,10 +247,14 @@
 
   <script>
     // ---- Configuración ----
-    // URL del Google Apps Script que guarda el turno en el calendario y manda el mail de aviso.
-    // Mientras esté vacía, la reserva se envía por WhatsApp al número de A1.
+    // Cada reserva avisa por varios lados:
+    //  - WhatsApp: se abre con el mensaje armado hacia el número de A1.
+    //  - Mail a AVISO_MAIL (vía formsubmit.co; la primera vez llega un mail para activarlo).
+    //  - Si SCRIPT_URL tiene la URL del Google Apps Script: se carga en Google Calendar,
+    //    bloquea el horario y manda mail a A1 y al cliente (en ese caso no se usa formsubmit).
     const SCRIPT_URL = '';
     const WHATSAPP = '5491133258129';
+    const AVISO_MAIL = 'comercial@a1broker.com.ar';
     const DIAS_A_MOSTRAR = 10;          // días hábiles hacia adelante
     const HORARIOS = [                   // franjas de atención (hora Argentina)
       { desde: '09:00', hasta: '13:00' },
@@ -356,9 +372,13 @@
       if (!datos.nombre || !datos.telefono) return mostrarError('Completá nombre y teléfono.');
       if (!/^\S+@\S+\.\S+$/.test(datos.email)) return mostrarError('Revisá el mail.');
 
+      const linkWA = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(mensajeWA(datos))}`;
+      $('btn-wa').href = linkWA;
+      $('btn-cal').href = linkCalendario(datos);
+
       if (!SCRIPT_URL) {
-        const msg = `Hola, quiero agendar una entrevista.\n📅 ${textoCuando()}\n👤 ${datos.nombre}\n📞 ${datos.telefono}\n✉️ ${datos.email}\n🛡 ${datos.tema}` + (datos.comentario ? `\n💬 ${datos.comentario}` : '');
-        window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+        window.open(linkWA, '_blank');
+        avisarPorMail(datos);
         return terminar();
       }
 
@@ -366,7 +386,7 @@
       try {
         const r = await fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(datos) });
         const res = await r.json();
-        if (res.ok) return terminar();
+        if (res.ok) { window.open(linkWA, '_blank'); return terminar(); }
         if (res.error === 'ocupado') {
           ocupados.add(datos.inicio);
           elegirDia(diaSel, document.querySelector('.day[aria-pressed="true"]'));
@@ -379,6 +399,34 @@
         boton.disabled = false; boton.textContent = 'Confirmar entrevista';
       }
     });
+
+    function mensajeWA(d) {
+      return `Hola, agendé una entrevista desde la web.\n📅 ${textoCuando()}\n👤 ${d.nombre}\n📞 ${d.telefono}\n✉️ ${d.email}\n🛡 ${d.tema}` + (d.comentario ? `\n💬 ${d.comentario}` : '');
+    }
+
+    function avisarPorMail(d) {
+      fetch(`https://formsubmit.co/ajax/${AVISO_MAIL}`, {
+        method: 'POST', keepalive: true,
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          _subject: `Nueva entrevista: ${d.nombre} - ${textoCuando()}`,
+          _template: 'table', _captcha: 'false',
+          Cuándo: textoCuando(), Nombre: d.nombre, Teléfono: d.telefono, email: d.email,
+          Interés: d.tema, Comentario: d.comentario || '-',
+        }),
+      }).catch(() => {});
+    }
+
+    function linkCalendario(d) {
+      const ini = new Date(d.inicio), fin = new Date(ini.getTime() + DURACION * 60e3);
+      const z = (x) => x.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+      const q = new URLSearchParams({
+        action: 'TEMPLATE', text: 'Entrevista con A1 Broker',
+        dates: `${z(ini)}/${z(fin)}`,
+        details: `Un ejecutivo especialista de A1 Broker te llama al ${d.telefono}. Consultas: WhatsApp 11 3325-8129.`,
+      });
+      return `https://calendar.google.com/calendar/render?${q}`;
+    }
 
     function terminar() {
       $('cuando').textContent = textoCuando().replace(/^./, c => c.toUpperCase());
