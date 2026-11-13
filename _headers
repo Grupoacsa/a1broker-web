@@ -1,0 +1,5 @@
+https://a1broker-web.pages.dev/*
+  X-Robots-Tag: noindex
+
+https://:version.a1broker-web.pages.dev/*
+  X-Robots-Tag: noindex
